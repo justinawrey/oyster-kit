@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace BlueOyster.JsonPersistence
+namespace BlueOyster.Json
 {
     public static class JsonPersistence
     {

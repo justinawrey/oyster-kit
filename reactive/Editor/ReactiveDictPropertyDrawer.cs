@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace ReactiveUnity.PropertyDrawers
+namespace BlueOyster.Reactive.PropertyDrawers
 {
     [CustomPropertyDrawer(typeof(ReactiveDict<,>))]
     public class ReactiveDictPropertyDrawer : PropertyDrawer

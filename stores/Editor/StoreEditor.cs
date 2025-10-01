@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
-using BlueOyster.JsonPersistence;
+using BlueOyster.Json;
 using UnityEditor;
 using UnityEngine;
 using System.Threading.Tasks;

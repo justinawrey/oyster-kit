@@ -1,5 +1,5 @@
 using Cysharp.Threading.Tasks;
-using Singletons;
+using BlueOyster.Singletons;
 using BlueOyster.EventBus;
 using System;
 using BlueOyster.Stores;

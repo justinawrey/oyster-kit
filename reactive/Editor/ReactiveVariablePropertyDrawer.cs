@@ -3,7 +3,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace ReactiveUnity.PropertyDrawers
+namespace BlueOyster.Reactive.PropertyDrawers
 {
     [CustomPropertyDrawer(typeof(Reactive<>))]
     public class ReactiveVariablePropertyDrawer : PropertyDrawer

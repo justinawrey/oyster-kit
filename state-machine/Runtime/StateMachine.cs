@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using BlueOyster.Logger;
+using StructuredLogger = BlueOyster.Logger;
 using BlueOyster.Reactive;
 #if UNITY_EDITOR
 using UnityEditor;

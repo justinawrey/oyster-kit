@@ -1,0 +1,19 @@
+{
+    "name": "OysterKit.Runtime",
+    "rootNamespace": "OysterKit",
+    "references": [
+        "UniTask",
+        "Unity.Mathematics",
+        "Unity.TextMeshPro",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -8,8 +8,9 @@ namespace BlueOyster.Damageables
         public int HitDamage;
         public int PrevHealth;
         public int CurrHealth;
+        public Vector3 HitDir;
         public int? MaxHealth;
-        public Vector3? CollisionPoint;
+        public GameObject SourceGameObject;
     }
 
     public struct HealHit
@@ -142,7 +143,7 @@ namespace BlueOyster.Damageables
             }
         }
 
-        public void TakeDamage(int amt, Vector3? collisionPoint = null)
+        public void TakeDamage(int amt, GameObject sourceGo)
         {
             amt = Invulnerable ? 0 : amt;
             int prevHealth = currHealth;
@@ -157,7 +158,7 @@ namespace BlueOyster.Damageables
                         PrevHealth = prevHealth,
                         CurrHealth = currHealth,
                         MaxHealth = maxHealth,
-                        CollisionPoint = collisionPoint,
+                        SourceGameObject = sourceGo,
                     }
                 );
             }

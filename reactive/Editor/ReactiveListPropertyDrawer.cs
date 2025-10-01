@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ReactiveUnity.PropertyDrawers
+namespace BlueOyster.Reactive.PropertyDrawers
 {
     [CustomPropertyDrawer(typeof(ReactiveList<>))]
     public class ReactiveListPropertyDrawer : PropertyDrawer

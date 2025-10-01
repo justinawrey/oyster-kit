@@ -1,9 +1,9 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace StructuredLogger
+namespace BlueOyster.Logger
 {
-    [CustomPropertyDrawer(typeof(StructuredLogger.Logger))]
+    [CustomPropertyDrawer(typeof(Logger))]
     public class LoggerPropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

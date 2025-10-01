@@ -2,7 +2,7 @@ using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
-namespace Dynamics
+namespace BlueOyster.Dynamics
 {
     [CustomEditor(typeof(DynamicsPresetSO))]
     public class DynamicsPresetSOEditor : Editor

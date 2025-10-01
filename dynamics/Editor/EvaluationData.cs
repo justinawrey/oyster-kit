@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Dynamics
+namespace BlueOyster.Dynamics
 {
     public class EvaluationData
     {

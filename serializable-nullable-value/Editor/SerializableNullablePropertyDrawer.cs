@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SerializableNullable
+namespace BlueOyster.SerializableNullableValue
 {
     [CustomPropertyDrawer(typeof(SerializableNullable<>))]
     public class SerializableNullablePropertyDrawer : PropertyDrawer
