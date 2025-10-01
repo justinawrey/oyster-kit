@@ -1,0 +1,11 @@
+{
+    "name": "com.blueoyster.oyster-kit",
+    "version": "0.0.1",
+    "description": "Oyster kit!",
+    "displayName": "Oyster Kit",
+    "author": {
+        "name": "Justin Awrey",
+        "email": "justin@justinawrey.com",
+        "url": "https://justinawrey.com"
+    }
+}
