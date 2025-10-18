@@ -20,9 +20,6 @@ namespace BlueOyster.Reactive
             if (_unsub != null)
             {
                 _unsub();
-                Debug.LogWarning(
-                    "reactive-unity (computed): computed variable unsubscribe hooks have been overwritten.  Did you call 'React' twice?"
-                );
             }
             _unsub = unsub;
             return _unsub;
