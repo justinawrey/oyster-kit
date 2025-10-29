@@ -76,6 +76,12 @@ namespace BlueOyster.StateMachine
                 return;
             }
 
+            if (CurrentState.Value == null)
+            {
+                Logger.Info("current state is null in update, initialize better!");
+                return;
+            }
+
             CurrentState.Value.OnUpdate();
         }
 
@@ -83,6 +89,12 @@ namespace BlueOyster.StateMachine
         {
             if (!Application.isPlaying)
             {
+                return;
+            }
+
+            if (CurrentState.Value == null)
+            {
+                Logger.Info("current state is null in fixed update, initialize better!");
                 return;
             }
 
