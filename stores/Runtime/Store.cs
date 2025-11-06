@@ -106,6 +106,23 @@ namespace BlueOyster.Stores
             return store;
         }
 
+        public static void PrimeAll()
+        {
+            Store[] stores = Resources.LoadAll<Store>(assetFolder);
+            foreach (Store store in stores)
+            {
+                // skip it if its already primed
+                Type storeType = store.GetType();
+                if (storeCache.ContainsKey(storeType))
+                {
+                    continue;
+                }
+
+                store.SubscribeToComputed();
+                storeCache[storeType] = store;
+            }
+        }
+
         // TODO: what if it doesn't exist yet?
         // TODO: memory use here isnt great
         public static async Task<T> LoadFromDisk<T>(T store, bool triggerSubscribeToComputed = true)

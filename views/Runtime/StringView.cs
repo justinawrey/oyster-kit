@@ -1,10 +1,10 @@
-using BlueOyster.Stores;
 using TMPro;
 using UnityEngine;
 
 namespace BlueOyster.Views
 {
-    public abstract class BaseIntegerView<T> : BaseViewMB<T, int> where T : Store
+    [ExecuteAlways]
+    public class StringView : BaseViewMB<string>
     {
         [SerializeField]
         private TextMeshProUGUI text;
@@ -12,9 +12,10 @@ namespace BlueOyster.Views
         [SerializeField]
         private string prefix;
 
-        protected override void OnChange(int value)
+        protected override void OnChange(string value)
         {
             text.text = $"{prefix}{value}";
         }
     }
 }
+

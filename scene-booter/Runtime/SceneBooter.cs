@@ -28,6 +28,7 @@ namespace BlueOyster.SceneBooter
 
         protected void OnEnable()
         {
+            Store.PrimeAll();
             if (Hook != StartupHook.Enable) return;
             Run(Context).Forget();
         }
