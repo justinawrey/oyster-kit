@@ -5,7 +5,7 @@ using BlueOyster.SceneBooter;
 
 namespace BlueOyster.UIListeners
 {
-    public abstract class EmitGameEventUiListener<C, GE> : MonoBehaviour, IPointerClickHandler
+    public abstract class EmitGameEventClickListener<C, GE> : MonoBehaviour, IPointerClickHandler
         where C : IBooterConfig<GE>
         where GE : Enum
     {
