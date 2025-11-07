@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BlueOyster.StateMachine;
 using UnityEditor;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine;
 public class StateMachineToggleableCoordinatorMBEditor : Editor
 {
     private StateMachineToggleableCoordinatorMB targ;
-    private BaseStateMB state;
+    private readonly List<BaseStateMB> states = new();
 
     private void OnEnable()
     {
@@ -19,11 +20,19 @@ public class StateMachineToggleableCoordinatorMBEditor : Editor
 
         DrawPropertiesExcluding(serializedObject, "m_Script");
 
-        EditorGUILayout.LabelField("Debug Options", EditorStyles.boldLabel);
-        state = (BaseStateMB)EditorGUILayout.ObjectField("Simulated State", state, typeof(BaseStateMB), true);
-        if (GUILayout.Button("Simulate State Change"))
+        if (targ.StateMachine != null)
         {
-            targ.SimulateStateChange(state);
+            EditorGUILayout.LabelField("Simulate State Change", EditorStyles.boldLabel);
+
+            // TODO: ack could be slow
+            targ.StateMachine.gameObject.GetComponents(states);
+            foreach (BaseStateMB state in states)
+            {
+                if (GUILayout.Button(state.GetType().Name))
+                {
+                    targ.SimulateStateChange(state);
+                }
+            }
         }
 
         serializedObject.ApplyModifiedProperties();

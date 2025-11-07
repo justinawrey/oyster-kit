@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace BlueOyster.ProceduralAnimations
 {
-    [CustomEditor(typeof(PulserMB))]
-    public class PulserMBEditor : Editor
+    [CustomEditor(typeof(BaseImpulse), true)]
+    public class BaseImpulseEditor : Editor
     {
-        private PulserMB pulserTarget;
+        private BaseImpulse baseImpulse;
 
         private void OnEnable()
         {
-            pulserTarget = (PulserMB)target;
+            baseImpulse = (BaseImpulse)target;
         }
 
         public override void OnInspectorGUI()
@@ -24,16 +24,16 @@ namespace BlueOyster.ProceduralAnimations
             // Check if we're in play mode
             if (!Application.isPlaying)
             {
-                EditorGUILayout.HelpBox("Enter Play Mode to test the pulse animation.", MessageType.Info);
+                EditorGUILayout.HelpBox("Enter Play Mode to test the impulse animation.", MessageType.Info);
                 GUI.enabled = false;
             }
 
             // Add test button
-            if (GUILayout.Button("Test Pulse Animation"))
+            if (GUILayout.Button("Test Impulse Animation"))
             {
-                if (pulserTarget != null && Application.isPlaying)
+                if (baseImpulse != null && Application.isPlaying)
                 {
-                    pulserTarget.Pulse();
+                    baseImpulse.Trigger();
                 }
             }
 

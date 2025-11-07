@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BlueOyster.ProceduralAnimations
 {
-    public class RecoilerMB : MonoBehaviour
+    public class RecoilerMB : BaseImpulse
     {
         [SerializeField]
         private DynamicLocalPosition3 position;
@@ -22,7 +22,7 @@ namespace BlueOyster.ProceduralAnimations
             originalPosition = transform.localPosition;
         }
 
-        public void Recoil()
+        public override void Trigger()
         {
             Routine().Forget();
         }

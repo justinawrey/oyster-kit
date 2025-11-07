@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BlueOyster.ProceduralAnimations
 {
-    public class PulserMB : MonoBehaviour
+    public class PulserMB : BaseImpulse
     {
         [SerializeField]
         private DynamicScale3 scale;
@@ -22,7 +22,7 @@ namespace BlueOyster.ProceduralAnimations
             originalScale = transform.localScale;
         }
 
-        public void Pulse()
+        public override void Trigger()
         {
             Routine().Forget();
         }

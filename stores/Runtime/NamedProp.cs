@@ -3,6 +3,11 @@ using System.Reflection;
 using BlueOyster.Stores;
 using UnityEngine;
 
+public interface INamedPropSourceProvider
+{
+    object Source { get; }
+}
+
 [Serializable]
 public class NamedProp
 {
@@ -11,6 +16,19 @@ public class NamedProp
 
     [SerializeField]
     private string propertyName;
+
+    private object ComputedSource
+    {
+        get
+        {
+            if (source is INamedPropSourceProvider provider)
+            {
+                return provider.Source;
+            }
+
+            return source;
+        }
+    }
 
     private object Property
     {
@@ -21,13 +39,13 @@ public class NamedProp
                 return default;
             }
 
-            if (source == null)
+            if (ComputedSource == null)
             {
                 return default;
             }
 
             // disgusting. but fuck it
-            Type type = source.GetType();
+            Type type = ComputedSource.GetType();
             if (type.BaseType == typeof(Store))
             {
                 Store.GetDynamic(type);
@@ -43,7 +61,7 @@ public class NamedProp
                 return default;
             }
 
-            return prop.GetValue(source);
+            return prop.GetValue(ComputedSource);
         }
     }
 

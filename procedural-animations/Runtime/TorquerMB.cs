@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BlueOyster.ProceduralAnimations
 {
-    public class TorquerMB : MonoBehaviour
+    public class TorquerMB : BaseImpulse
     {
         [SerializeField]
         private DynamicLocalRotation3 rotation;
@@ -28,7 +28,7 @@ namespace BlueOyster.ProceduralAnimations
             originalLocalRotation = rotation.EulerAngles;
         }
 
-        public void Torque()
+        public override void Trigger()
         {
             Routine().Forget();
         }

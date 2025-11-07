@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace BlueOyster.Dweens
@@ -25,6 +27,8 @@ namespace BlueOyster.Dweens
         private bool _on = false;
         public bool On => _on;
 
+        private CancellationTokenSource _cts = null;
+
         private RectTransform _rtBacking = null;
         private RectTransform _rt
         {
@@ -46,18 +50,31 @@ namespace BlueOyster.Dweens
             SetupDween();
         }
 
+        private async UniTaskVoid TurnOnRoutine(CancellationTokenSource cts)
+        {
+            foreach (var dween in _dweens)
+            {
+                var isCanceled = await UniTask.WaitForSeconds(dween.RisingDelay, cancellationToken: cts.Token).SuppressCancellationThrow();
+                if (isCanceled)
+                {
+                    break;
+                }
+
+                dween.Dween.TurnOn();
+            }
+        }
+
         public override void TurnOn()
         {
             _on = true;
-            foreach (var dween in _dweens)
-            {
-                dween.Dween.TurnOn();
-            }
+            _cts = new CancellationTokenSource();
+            TurnOnRoutine(_cts).Forget();
         }
 
         public override void TurnOff()
         {
             _on = false;
+            _cts?.Cancel();
 
             // When turning off, go in the reverse order.
             for (int i = _dweens.Count - 1; i >= 0; i--)
@@ -91,6 +108,7 @@ namespace BlueOyster.Dweens
         public override void ForceOff()
         {
             _on = false;
+            _cts?.Cancel();
             foreach (var dween in _dweens)
             {
                 dween.Dween.ForceOff();

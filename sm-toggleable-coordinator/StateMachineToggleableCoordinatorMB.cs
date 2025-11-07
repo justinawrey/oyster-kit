@@ -14,8 +14,7 @@ public class StateRule
 
 public class StateMachineToggleableCoordinatorMB : MonoBehaviour
 {
-    [SerializeField]
-    private StateMachine stateMachine;
+    public StateMachine StateMachine;
 
     [SerializeField]
     private List<StateRule> rules = new();
@@ -38,8 +37,8 @@ public class StateMachineToggleableCoordinatorMB : MonoBehaviour
             }
         }
 
-        unsub = stateMachine.CurrentState.OnChange(CheckToggleables);
-        CheckToggleables(null, stateMachine.CurrentState.Value);
+        unsub = StateMachine.CurrentState.OnChange(CheckToggleables);
+        CheckToggleables(null, StateMachine.CurrentState.Value);
     }
 
     private void OnDisable()

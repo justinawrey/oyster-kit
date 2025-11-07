@@ -11,6 +11,11 @@ namespace BlueOyster.UnitMotion
         Vector3 GetNormalizedTargetDir();
     }
 
+    public interface IMotionStatsProvider
+    {
+        float GetMaxSpeed();
+    }
+
     // A seperate component for controlling motion because we want some SPACEY-ASS looking motion.
     [RequireComponent(typeof(IMotionProvider))]
     public class UnitMotionMB : BaseToggleable
@@ -31,6 +36,7 @@ namespace BlueOyster.UnitMotion
         private DynamicLocalRotation3 rotation;
 
         private IMotionProvider motionProvider;
+        private IMotionStatsProvider motionStatsProvider;
         private Vector3 motionDir;
         private Vector3 targetDir;
 
@@ -38,6 +44,11 @@ namespace BlueOyster.UnitMotion
         {
             motionProvider = GetComponent<IMotionProvider>();
             targetDir = motionProvider.GetNormalizedTargetDir();
+
+            if (TryGetComponent(out motionStatsProvider))
+            {
+                MaxSpeed = motionStatsProvider.GetMaxSpeed();
+            }
         }
 
         private void Update()
