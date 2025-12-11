@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 849a1e5ec9b934f418ec9ddbf8f5f71c, type: 3}
-  m_Name: Ufo In
+  m_Name: Galaxy Select
   m_EditorClassIdentifier: 
-  F: 0.57
-  Z: 0.77
-  R: -0.76
+  F: 1.1
+  Z: 0.7
+  R: 0

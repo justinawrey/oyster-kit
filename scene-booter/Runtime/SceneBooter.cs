@@ -3,6 +3,7 @@ using BlueOyster.Singletons;
 using BlueOyster.EventBus;
 using System;
 using BlueOyster.Stores;
+using SG = BlueOyster.ShaderGlobals;
 using UnityEngine;
 
 namespace BlueOyster.SceneBooter
@@ -29,6 +30,7 @@ namespace BlueOyster.SceneBooter
         protected void OnEnable()
         {
             Store.PrimeAll();
+            SG.ShaderGlobals.Prime();
             if (Hook != StartupHook.Enable) return;
             Run(Context).Forget();
         }

@@ -22,7 +22,7 @@ namespace BlueOyster.Views
         protected Action unsub;
         private ReactiveBase<P> ReactiveProp => namedProp.ReadValue<ReactiveBase<P>>();
 
-        protected void OnEnable()
+        protected virtual void OnEnable()
         {
             unsub = ReactiveProp.OnChange(OnChange);
 

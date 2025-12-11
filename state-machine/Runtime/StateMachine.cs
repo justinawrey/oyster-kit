@@ -25,6 +25,8 @@ namespace BlueOyster.StateMachine
 
         private BaseStateMB[] statesCache = null;
 
+        public static event Action<BaseStateMB, BaseStateMB> OnStateChange;
+
         protected void Awake()
         {
             if (!Application.isPlaying)
@@ -159,12 +161,14 @@ namespace BlueOyster.StateMachine
 
         public void ChangeState(Type stateType)
         {
+            BaseStateMB from = CurrentState.Value;
             // The initial state is not set until the first call to ChangeState,
             // so currentState will be null on the first call
             CurrentState.Value?.OnExit();
             CurrentState.Value = GetState(stateType);
             CurrentState.Value.OnEnter();
 
+            OnStateChange?.Invoke(from, CurrentState.Value);
             Logger.Info("entered " + CurrentState.Value.GetType().Name);
         }
     }

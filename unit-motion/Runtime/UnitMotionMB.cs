@@ -43,9 +43,10 @@ namespace BlueOyster.UnitMotion
         private void Awake()
         {
             motionProvider = GetComponent<IMotionProvider>();
+            motionStatsProvider = GetComponent<IMotionStatsProvider>();
             targetDir = motionProvider.GetNormalizedTargetDir();
 
-            if (TryGetComponent(out motionStatsProvider))
+            if (motionStatsProvider != null)
             {
                 MaxSpeed = motionStatsProvider.GetMaxSpeed();
             }
@@ -77,6 +78,11 @@ namespace BlueOyster.UnitMotion
 
             float GetForceSingleAxis(float motion, float rbVel)
             {
+                if (motionStatsProvider != null)
+                {
+                    MaxSpeed = motionStatsProvider.GetMaxSpeed();
+                }
+
                 float targetSpeed = motion * MaxSpeed;
                 float speedDiff = targetSpeed - rbVel;
                 float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? accel : deccel;

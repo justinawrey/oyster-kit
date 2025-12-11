@@ -2,16 +2,36 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using BlueOyster.Dynamics;
 using BlueOyster.Toggleables;
+using System.Collections.Generic;
 
 namespace BlueOyster.UnitMotion
 {
+    public interface IBoostProvider
+    {
+        bool IsBoosting();
+    }
+
+    public enum TiltMeshType
+    {
+        Default = 100,
+        Boost = 200
+    }
+
+    [System.Serializable]
+    public class TiltParams
+    {
+        public float MaxTiltAngle = 10f;
+        public DynamicLocalRotation3 TiltMesh;
+        public TiltMeshType Type = TiltMeshType.Default;
+    }
+
     public class MovementController : BaseToggleable, IMotionProvider
     {
         [SerializeField]
-        private DynamicLocalRotation3 tiltMesh;
+        private List<TiltParams> tiltParams;
 
         [SerializeField]
-        private float maxTiltAngle = 10f;
+        private float boostTiltAdditiveValue = 5.0f;
 
         [SerializeField]
         private InputActionReference moveActionReference;
@@ -22,17 +42,26 @@ namespace BlueOyster.UnitMotion
         private Plane basePlane = new(Vector3.up, Vector3.zero);
 
         private Camera cam;
+        private IBoostProvider boostProvider = null;
 
         private new void OnEnable()
         {
             base.OnEnable();
+            boostProvider = GetComponent<IBoostProvider>();
             cam = Camera.main;
         }
 
         private void Update()
         {
             ReadInput();
-            ApplyMeshTilt();
+
+            bool boosting = false;
+            if (boostProvider != null)
+            {
+                boosting = boostProvider.IsBoosting();
+            }
+
+            ApplyMeshTilt(boosting);
         }
 
         public Vector3 GetNormalizedMotionDir()
@@ -62,14 +91,25 @@ namespace BlueOyster.UnitMotion
             return new Vector3(v.x, 0, v.z).normalized;
         }
 
-        private void ApplyMeshTilt()
+        private void ApplyMeshTilt(bool boosting)
         {
-            Vector3 motionDir = GetNormalizedMotionDir();
-            tiltMesh.EulerAngles = new Vector3(
-                motionDir.z * maxTiltAngle,
-                0,
-                -motionDir.x * maxTiltAngle
-            );
+            foreach (var tiltParam in tiltParams)
+            {
+                Vector3 motionDir = GetNormalizedMotionDir();
+
+                float tilt = tiltParam.MaxTiltAngle;
+                if (boosting && tiltParam.Type == TiltMeshType.Boost)
+                {
+                    tilt += boostTiltAdditiveValue;
+                }
+
+
+                tiltParam.TiltMesh.EulerAngles = new Vector3(
+                    motionDir.z * tilt,
+                    0,
+                    -motionDir.x * tilt
+                );
+            }
         }
 
         private void ReadInput()

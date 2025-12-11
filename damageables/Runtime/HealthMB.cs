@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using BlueOyster.Reactive;
 using UnityEngine;
 
 namespace BlueOyster.Damageables
@@ -52,24 +54,47 @@ namespace BlueOyster.Damageables
         [SerializeField]
         private int initialHealth;
 
-        public bool Invulnerable = false;
         public bool MaxHealthUncapped = false;
+        public Reactive<bool> Invulnerable = new(false);
 
         public List<IDamageable> damageables = new();
         public List<IHealable> healables = new();
         public List<IKillable> killables = new();
 
-        private int currHealth;
-        public int CurrHealth => currHealth;
+        [NonSerialized]
+        public Reactive<int> CurrHealth = new(0);
+
+        public Computed<bool> Dead = new();
+        public Computed<float> CurrHealthPct = new();
+
+        private Action unsub;
+        private Action unsub2;
 
         private void OnEnable()
         {
-            currHealth = initialHealth;
+            CurrHealth.Value = initialHealth;
             Healths[col] = this;
+
+            unsub = Dead.React(CurrHealth, Invulnerable, (currHealth, invulnerable) =>
+            {
+                if (invulnerable)
+                {
+                    return false;
+                }
+
+                return currHealth <= 0;
+            });
+
+            unsub2 = CurrHealthPct.React(CurrHealth, (currHealth) =>
+            {
+                return (float)currHealth / maxHealth;
+            });
         }
 
         private void OnDisable()
         {
+            unsub?.Invoke();
+            unsub2?.Invoke();
             damageables.Clear();
             killables.Clear();
             healables.Clear();
@@ -109,7 +134,7 @@ namespace BlueOyster.Damageables
 
         public void ForceSetHealth(int health)
         {
-            currHealth = Mathf.Min(maxHealth, health);
+            CurrHealth.Value = Mathf.Min(maxHealth, health);
         }
 
         public void ForceSetMaxHealth(int maxHealth)
@@ -119,14 +144,14 @@ namespace BlueOyster.Damageables
 
         public void Heal(int amt)
         {
-            int prevHealth = currHealth;
+            int prevHealth = CurrHealth.Value;
             if (MaxHealthUncapped)
             {
-                currHealth += amt;
+                CurrHealth.Value += amt;
             }
             else
             {
-                currHealth = Mathf.Min(maxHealth, currHealth + amt);
+                CurrHealth.Value = Mathf.Min(maxHealth, CurrHealth.Value + amt);
             }
 
             for (int i = 0; i < healables.Count; i++)
@@ -136,7 +161,7 @@ namespace BlueOyster.Damageables
                     {
                         HealAmount = amt,
                         PrevHealth = prevHealth,
-                        CurrHealth = currHealth,
+                        CurrHealth = CurrHealth.Value,
                         MaxHealth = maxHealth,
                     }
                 );
@@ -145,9 +170,9 @@ namespace BlueOyster.Damageables
 
         public void TakeDamage(int amt, GameObject sourceGo)
         {
-            amt = Invulnerable ? 0 : amt;
-            int prevHealth = currHealth;
-            currHealth = Mathf.Max(0, currHealth - amt);
+            amt = Invulnerable.Value ? 0 : amt;
+            int prevHealth = CurrHealth.Value;
+            CurrHealth.Value = Mathf.Max(0, CurrHealth.Value - amt);
 
             for (int i = 0; i < damageables.Count; i++)
             {
@@ -156,14 +181,14 @@ namespace BlueOyster.Damageables
                     {
                         HitDamage = amt,
                         PrevHealth = prevHealth,
-                        CurrHealth = currHealth,
+                        CurrHealth = CurrHealth.Value,
                         MaxHealth = maxHealth,
                         SourceGameObject = sourceGo,
                     }
                 );
             }
 
-            if (currHealth <= 0)
+            if (CurrHealth.Value <= 0)
             {
                 for (int i = 0; i < killables.Count; i++)
                 {

@@ -22,8 +22,23 @@ namespace BlueOyster.Stores
         private readonly float verticalSpace = 10;
         private Store store;
 
-        public bool Persisted => JsonPersistence.JsonExists(store.FileName);
-        public string PersistencePath => JsonPersistence.GetPersistencePath(store.FileName);
+        public bool Persisted
+        {
+            get
+            {
+                store = Store.GetDynamic(target.GetType());
+                return JsonPersistence.JsonExists(store.FileName);
+            }
+        }
+
+        public string PersistencePath
+        {
+            get
+            {
+                store = Store.GetDynamic(target.GetType());
+                return JsonPersistence.GetPersistencePath(store.FileName);
+            }
+        }
 
         private void OnEnable()
         {

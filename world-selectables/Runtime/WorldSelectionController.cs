@@ -22,7 +22,7 @@ namespace BlueOyster.WorldSelectables
     public class WorldSelectionController : BaseToggleable
     {
         private Dictionary<Collider, List<IWorldSelectable>> worldSelectables = new();
-        private Reactive<Collider> activeCollider = new(null);
+        public static Reactive<Collider> ActiveCollider = new(null);
         private Camera mainCam;
         private Action unsub;
         private IMousePositionProvider mousePositionProvider;
@@ -52,8 +52,8 @@ namespace BlueOyster.WorldSelectables
         {
             base.OnEnable();
             mainCam = Camera.main;
-            unsub = activeCollider.OnChange(OnActiveColliderChange);
-            OnActiveColliderChange(null, activeCollider.Value);
+            unsub = ActiveCollider.OnChange(OnActiveColliderChange);
+            OnActiveColliderChange(null, ActiveCollider.Value);
 
             mousePositionProvider = GetComponent<IMousePositionProvider>();
             if (mousePositionProvider == null)
@@ -61,7 +61,6 @@ namespace BlueOyster.WorldSelectables
                 throw new Exception("WorldSelectionController must have an IMousePositionProvider");
             }
 
-            worldSelectActionReference.action.Enable();
             worldSelectActionReference.action.performed += WorldSelect;
         }
 
@@ -69,7 +68,6 @@ namespace BlueOyster.WorldSelectables
         {
             base.OnDisable();
             unsub();
-            worldSelectActionReference.action.Disable();
             worldSelectActionReference.action.performed -= WorldSelect;
         }
 
@@ -87,7 +85,7 @@ namespace BlueOyster.WorldSelectables
         {
             if (!on)
             {
-                activeCollider.Value = null;
+                ActiveCollider.Value = null;
             }
         }
 
@@ -98,11 +96,11 @@ namespace BlueOyster.WorldSelectables
 
             if (Physics.Raycast(ray, out RaycastHit hit, 1000))
             {
-                activeCollider.Value = hit.collider;
+                ActiveCollider.Value = hit.collider;
             }
             else
             {
-                activeCollider.Value = null;
+                ActiveCollider.Value = null;
             }
         }
 
@@ -139,12 +137,12 @@ namespace BlueOyster.WorldSelectables
                 return;
             }
 
-            if (activeCollider.Value == null)
+            if (ActiveCollider.Value == null)
             {
                 return;
             }
 
-            if (worldSelectables.TryGetValue(activeCollider.Value, out var selectables))
+            if (worldSelectables.TryGetValue(ActiveCollider.Value, out var selectables))
             {
                 for (int i = 0; i < selectables.Count; i++)
                 {
