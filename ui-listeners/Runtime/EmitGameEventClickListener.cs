@@ -6,7 +6,7 @@ using Cysharp.Threading.Tasks;
 
 namespace BlueOyster.UIListeners
 {
-    public abstract class EmitGameEventClickListener<C, GE> : MonoBehaviour, IPointerClickHandler
+    public abstract class EmitGameEventClickListener<C, GE> : MonoBehaviour, IPointerClickHandler, ISubmitHandler
         where C : IBooterConfig<GE>
         where GE : Enum
     {
@@ -18,10 +18,30 @@ namespace BlueOyster.UIListeners
         [SerializeField]
         private float delay = 0f;
 
+        private bool canSubmit = true;
+
         public void OnPointerClick(PointerEventData eventData)
         {
+            if (!canSubmit) return;
+
             if (delay > 0)
             {
+                canSubmit = false;
+                EmitWithDelay(delay).Forget();
+            }
+            else
+            {
+                booter.Context.EventBus.Trigger(_event);
+            }
+        }
+
+        public void OnSubmit(BaseEventData eventData)
+        {
+            if (!canSubmit) return;
+
+            if (delay > 0)
+            {
+                canSubmit = false;
                 EmitWithDelay(delay).Forget();
             }
             else
@@ -34,6 +54,7 @@ namespace BlueOyster.UIListeners
         {
             await UniTask.WaitForSeconds(delay);
             booter.Context.EventBus.Trigger(_event);
+            canSubmit = true;
         }
     }
 }

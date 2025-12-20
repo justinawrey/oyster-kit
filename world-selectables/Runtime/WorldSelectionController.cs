@@ -21,7 +21,7 @@ namespace BlueOyster.WorldSelectables
 
     public class WorldSelectionController : BaseToggleable
     {
-        private Dictionary<Collider, List<IWorldSelectable>> worldSelectables = new();
+        private readonly Dictionary<Collider, List<IWorldSelectable>> worldSelectables = new();
         public static Reactive<Collider> ActiveCollider = new(null);
         private Camera mainCam;
         private Action unsub;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BlueOyster.Reactive;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace BlueOyster.Damageables
 {
@@ -23,17 +24,17 @@ namespace BlueOyster.Damageables
         public int? MaxHealth;
     }
 
-    public interface IDamageable
+    public interface IDamageable : IEventSystemHandler
     {
         public void OnDamage(DamageHit hit);
     }
 
-    public interface IHealable
+    public interface IHealable : IEventSystemHandler
     {
         public void OnHeal(HealHit hit);
     }
 
-    public interface IKillable
+    public interface IKillable : IEventSystemHandler
     {
         // low number = higher priority
         public int Priority => 0;
